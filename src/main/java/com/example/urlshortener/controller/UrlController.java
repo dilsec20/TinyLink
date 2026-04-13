@@ -20,14 +20,16 @@ public class UrlController {
 
     // 1. Endpoint to Shorten the URL
     @PostMapping("/api/shorten")
-    public ResponseEntity<Map<String, String>> shortenUrl(@RequestBody Map<String, String> request) {
+    public ResponseEntity<Map<String, String>> shortenUrl(@RequestBody Map<String, String> request, jakarta.servlet.http.HttpServletRequest httpRequest) {
         String longUrl = request.get("longUrl");
         if (longUrl == null || longUrl.isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("error", "longUrl is required"));
         }
 
         String shortCode = urlService.shortenUrl(longUrl);
-        String shortUrl = "http://localhost:8080/" + shortCode;
+        String requestUrl = httpRequest.getRequestURL().toString();
+        String baseUrl = requestUrl.replace("/api/shorten", "");
+        String shortUrl = baseUrl + "/" + shortCode;
 
         return ResponseEntity.ok(Map.of("shortUrl", shortUrl, "shortCode", shortCode));
     }
