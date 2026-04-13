@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: tinylink
+    env: docker
+    plan: free
+    repo: https://github.com/dilsec20/TinyLink.git
+    branch: main
