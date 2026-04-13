@@ -1,6 +1,9 @@
 # TinyLink - URL Shortener
 
-A simple, fast, and efficient URL shortening service built with Spring Boot and H2 in-memory database.
+**Live Demo**: [https://tinylink-45j9.onrender.com](https://tinylink-45j9.onrender.com)
+
+## About Project
+TinyLink is a simple, fast, and efficient URL shortening service. It converts long, unwieldy URLs into concise aliases. Built using a robust backend architecture, it features a clean and interactive user interface that allows users to instantly generate and copy shortened links. The application is fully containerized and currently deployed live on Render.
 
 ## Features
 
@@ -11,11 +14,18 @@ A simple, fast, and efficient URL shortening service built with Spring Boot and 
 
 ## Tech Stack
 
-- **Java 17**
-- **Spring Boot 3**
-- **Spring Data JPA**
-- **H2 Database**
-- **Maven**
+- **Backend:** Java 21, Spring Boot 3, Spring Data JPA, Hibernate
+- **Database:** H2 In-Memory Database
+- **Frontend:** HTML5, Vanilla JavaScript, CSS3
+- **Deployment:** Docker, Render (via Blueprint)
+- **Build Tool:** Maven
+
+## LLD Principles Applied
+
+- **Single Responsibility Principle (SRP):** Clear separation of concerns between Controllers (handling HTTP requests), Services (business logic for URL generation), and Repositories (database mapping).
+- **Service Layer Pattern:** The logic for generating the unique short code is isolated in `UrlService.java`, keeping the `UrlController.java` extremely lean.
+- **REST API Design First:** Standardized endpoint structures returning clear JSON payloads and predictable HTTP status codes (200 OK, 400 Bad Request, 404 Not Found, 302 Found).
+- **Stateless Architecture:** The application logic is entirely stateless, allowing simple vertical or horizontal scaling, delegating data persistence directly to the database layer.
 
 ## Getting Started
 
