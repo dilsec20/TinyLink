@@ -35,7 +35,7 @@ public class UrlController {
     }
 
     // 2. Endpoint to Redirect to the Long URL
-    @GetMapping("/{shortCode}")
+    @GetMapping("/{shortCode:[a-zA-Z0-9]+}")
     public RedirectView redirectToLongUrl(@PathVariable String shortCode) {
         return urlService.getLongUrl(shortCode)
                 .map(UrlController::createRedirectView)
