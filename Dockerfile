@@ -1,5 +1,5 @@
 # Build stage
-FROM eclipse-temurin:17-jdk AS build
+FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
 
 # Copy maven wrapper and project metadata first for better caching
@@ -12,7 +12,7 @@ COPY src src
 RUN chmod +x mvnw && ./mvnw -DskipTests clean package -DskipDocs -q
 
 # Production stage
-FROM eclipse-temurin:17-jre
+FROM eclipse-temurin:21-jre
 WORKDIR /app
 
 COPY --from=build /app/target/*.jar app.jar
