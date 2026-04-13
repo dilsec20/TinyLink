@@ -20,12 +20,28 @@ TinyLink is a simple, fast, and efficient URL shortening service. It converts lo
 - **Deployment:** Docker, Render (via Blueprint)
 - **Build Tool:** Maven
 
-## LLD Principles Applied
+## 🎯 Interview Focus: System Design & LLD
 
-- **Single Responsibility Principle (SRP):** Clear separation of concerns between Controllers (handling HTTP requests), Services (business logic for URL generation), and Repositories (database mapping).
-- **Service Layer Pattern:** The logic for generating the unique short code is isolated in `UrlService.java`, keeping the `UrlController.java` extremely lean.
-- **REST API Design First:** Standardized endpoint structures returning clear JSON payloads and predictable HTTP status codes (200 OK, 400 Bad Request, 404 Not Found, 302 Found).
-- **Stateless Architecture:** The application logic is entirely stateless, allowing simple vertical or horizontal scaling, delegating data persistence directly to the database layer.
+This project is built to demonstrate strong **Low-Level Design (LLD)** concepts and production-ready architectural decisions commonly discussed in backend engineering interviews:
+
+### 1. Architectural Patterns
+- **Service-Oriented Architecture:** Clear, strict separation of concerns into Controller (HTTP/routing), Service (business logic & cryptography), and Repository (data access) layers.
+- **Stateless Backend:** The application handles HTTP requests statelessly. It scales horizontally right out of the box because no session state is maintained on the application level.
+
+### 2. URL Generation Algorithm (DSA)
+- **Base62 Encoding:** Converts an auto-incrementing Base-10 database ID into a Base62 string (`a-z, A-Z, 0-9`), generating incredibly short and collision-free URLs mathematically without expensive heavy hashing functions.
+- **Concurrency Handling:** Implements thread-safe atomic counters (`AtomicLong`) to mimic distributed ID generation natively before applying Base62, preventing race conditions during high-volume concurrent traffic.
+
+### 3. SOLID & LLD Principles
+- **Single Responsibility Principle (SRP):** The `UrlController` only handles HTTP requests, while the `UrlService` strictly handles algorithmic conversion, encoding, and logic.
+- **Dependency Injection (DI):** Spring's core IoC container is heavily utilized for constructor injection, making the codebase decoupled and inherently testable.
+- **Robust Error Handling:** Designed with predictable HTTP status codes (200 OK, 400 Bad Request, 404 Not Found, 302 Found redirection). 
+
+### 4. Scalability Discussions (HLD Transition)
+To scale this to millions of requests (a common interview extension), the design is laid out for the following iterations:
+- **Database:** Migrate from H2 to a NoSQL store (Cassandra, DynamoDB) or a sharded relational database. 
+- **Caching:** Introduce a Redis instance or CDN layer to achieve highly accelerated `O(1)` concurrent reads for the redirect endpoint.
+- **Distributed ID Generation:** Transition from an `AtomicLong` to a distributed Ticket Server or Twitter Snowflake implementation to track auto-incrementing IDs across multiple instances.
 
 ## Getting Started
 
